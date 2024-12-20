@@ -1,4 +1,4 @@
-# ArchLinux Configure by FlashLizard
+# Linux Configure by FlashLizard
 
 plese install :
 - zsh
