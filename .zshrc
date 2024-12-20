@@ -1,3 +1,11 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -8,7 +16,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -65,18 +73,41 @@ ZSH_THEME="robbyrussell"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# For zplug
+if [ -f ~/.zplug/init.zsh ]; then
+  source ~/.zplug/init.zsh
+
+  zplug "zsh-users/zsh-syntax-highlighting"
+  zplug "zsh-users/zsh-autosuggestions"
+  zplug "Aloxaf/fzf-tab"
+
+  if ! zplug check --verbose; then
+    echo "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+	printf "If install failed, can run 'zplug install' to reinstall"
+    fi
+ fi
+ zplug load
+else
+ printf "Error: zplug dosen't install, use command:\nzsh -c \"$(wget https://raw.githubusercontent.com/zplug/installer/master/installer.zsh -O -)\"\nto install. then re-source."
+fi
+ 
+
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git z extract vi-mode gitignore cp command-not-found safe-paste colored-man-pages sudo)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
+
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -99,3 +130,17 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+bindkey '\eh'  backward-char         #ALT+h:向左移动一个单词
+bindkey '\el'  forward-char          #ALT+l：向右移动一个单词
+bindkey '\ek'  up-line-or-history    #ALT+k：向上移动一个单词
+bindkey '\ej'  down-line-or-history  #ALT+j：向下移动一个单词
+
+# for fzf-tab
+bindkey "^[[Z" fzf-tab-complete #shift+tab
+bindkey "^I" expand-or-complete
+zstyle ':fzf-tab:*' fzf-bindings 'alt-j:down' 'alt-k:up' 'alt-l:accept'
+zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

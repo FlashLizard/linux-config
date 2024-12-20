@@ -101,3 +101,5 @@ Plug 'easymotion/vim-easymotion'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+
+:colorscheme torte
