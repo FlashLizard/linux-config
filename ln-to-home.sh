@@ -1,3 +1,4 @@
+#!/bin/bash
 # 默认情况下不自动替换
 auto_replace=false
 
